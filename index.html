@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#C4622D" />
+  <meta name="description" content="Discover the daily habits, manners, and emotional wisdom of Prophet Muhammad ﷺ — verified from classical Islamic sources." />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Sublime Character" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+  <title>Sublime Character</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gold: #E8A020; --gold-light: #F5C842; --gold-pale: #FDF3D0;
+      --terra: #C4622D; --terra-light: #E8855A; --terra-pale: #FDE8D8;
+      --sage: #5A7A4A; --sage-light: #7AA05A; --sage-pale: #E8F0E0;
+      --teal: #2A7A6A; --teal-pale: #D8F0E8;
+      --cream: #FDFAF2; --parchment: #F5EED8; --warm-white: #FFFEF8;
+      --ink: #1A1208; --ink-mid: #3D2E12; --ink-soft: #6B5530; --ink-muted: #9A8060;
+      --border: #E8D8B8; --border-soft: #F0E4C8;
+      --radius: 16px; --radius-sm: 10px; --tab-h: 68px;
+    }
+    html, body { height: 100%; background: var(--cream); }
+    body { font-family: 'DM Sans', system-ui, sans-serif; color: var(--ink); overflow: hidden; height: 100dvh; }
+    #root { height: 100dvh; display: flex; flex-direction: column; }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+    @keyframes scaleIn { from { opacity:0; transform:scale(0.94) translateY(20px); } to { opacity:1; transform:scale(1) translateY(0); } }
+    @keyframes checkDraw { from { stroke-dashoffset:100; opacity:0; } to { stroke-dashoffset:0; opacity:1; } }
+    @keyframes particleBurst { 0% { transform:translate(-50%,-50%) scale(0); opacity:1; } 100% { transform:translate(calc(-50% + var(--tx)),calc(-50% + var(--ty))) scale(1); opacity:0; } }
+    @keyframes pulseGold { 0% { box-shadow:0 0 0 0 rgba(232,160,32,0.5); } 70% { box-shadow:0 0 0 10px rgba(232,160,32,0); } 100% { box-shadow:0 0 0 0 rgba(232,160,32,0); } }
+    @keyframes bloomIn { 0% { transform:scale(0.6) rotate(-20deg); opacity:0; } 65% { transform:scale(1.08) rotate(3deg); opacity:1; } 100% { transform:scale(1) rotate(0deg); opacity:1; } }
+    @keyframes slideUp { from { transform:translateY(100%); } to { transform:translateY(0); } }
+    @keyframes rollNumber { from { transform:translateY(12px); opacity:0; } to { transform:translateY(0); opacity:1; } }
+
+    .font-display { font-family: 'Playfair Display', Georgia, serif; }
+    .screen { flex:1; overflow-y:auto; overflow-x:hidden; padding-bottom:calc(var(--tab-h) + 12px); -webkit-overflow-scrolling:touch; }
+    .tab-bar { height:var(--tab-h); background:rgba(255,254,248,0.96); border-top:1.5px solid var(--border); display:flex; align-items:center; padding:0 8px; flex-shrink:0; backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); }
+    .tab-btn { flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; padding:8px 4px; border:none; background:none; cursor:pointer; color:var(--ink-muted); font-family:'DM Sans',sans-serif; font-size:10.5px; font-weight:500; letter-spacing:0.01em; border-radius:var(--radius-sm); transition:color 0.2s; -webkit-tap-highlight-color:transparent; }
+    .tab-btn.active { color:var(--terra); }
+    .tab-icon { width:30px; height:30px; display:flex; align-items:center; justify-content:center; border-radius:9px; font-size:17px; transition:background 0.2s,transform 0.2s; }
+    .tab-btn.active .tab-icon { background:var(--terra-pale); transform:scale(1.05); }
+    .card { background:var(--warm-white); border:1.5px solid var(--border-soft); border-radius:var(--radius); overflow:hidden; transition:transform 0.2s,box-shadow 0.2s; cursor:pointer; -webkit-tap-highlight-color:transparent; }
+    .card:active { transform:scale(0.985); }
+    .fab { display:flex; align-items:center; justify-content:center; gap:8px; padding:14px 24px; border:none; border-radius:50px; font-family:'DM Sans',sans-serif; font-size:15px; font-weight:600; cursor:pointer; transition:transform 0.2s,box-shadow 0.2s; -webkit-tap-highlight-color:transparent; width:100%; }
+    .fab:active { transform:scale(0.97); }
+    .fab-primary { background:linear-gradient(135deg,var(--terra) 0%,var(--terra-light) 100%); color:white; box-shadow:0 4px 16px rgba(196,98,45,0.35); }
+    .fab-secondary { background:var(--sage-pale); color:var(--sage); border:1.5px solid var(--sage-light); }
+    .search-input { width:100%; padding:11px 16px 11px 42px; border:1.5px solid var(--border); border-radius:12px; background:var(--warm-white); font-family:'DM Sans',sans-serif; font-size:14px; color:var(--ink); outline:none; transition:border-color 0.2s; }
+    .search-input:focus { border-color:var(--gold); }
+    .search-input::placeholder { color:var(--ink-muted); }
+    .category-pill { display:inline-flex; align-items:center; gap:5px; padding:3px 9px; border-radius:20px; font-size:10.5px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; }
+    .checklist-item { display:flex; align-items:center; gap:14px; padding:14px 16px; background:var(--warm-white); border:1.5px solid var(--border-soft); border-radius:12px; cursor:pointer; transition:background 0.25s,border-color 0.25s,transform 0.15s; -webkit-tap-highlight-color:transparent; user-select:none; }
+    .checklist-item:active { transform:scale(0.985); }
+    .checklist-item.completed { background:var(--sage-pale); border-color:var(--sage-light); }
+    .check-circle { width:30px; height:30px; flex-shrink:0; border-radius:50%; border:2.5px solid var(--border); display:flex; align-items:center; justify-content:center; transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1); position:relative; overflow:visible; background:white; }
+    .check-circle.done { border-color:var(--sage); background:var(--sage); animation:pulseGold 0.5s ease; }
+    .streak-bg { background:linear-gradient(135deg,var(--terra) 0%,var(--gold) 100%); border-radius:var(--radius); position:relative; overflow:hidden; }
+    .geo-bg { position:absolute; inset:0; opacity:0.07; background-image:url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='white'%3E%3Cpolygon points='40,5 65,20 75,47 60,72 20,72 5,47 15,20' opacity='0.5'/%3E%3Cpolygon points='40,15 58,26 65,47 55,65 25,65 15,47 22,26' opacity='0.3'/%3E%3C/g%3E%3C/svg%3E"); pointer-events:none; }
+    .detail-overlay { position:fixed; inset:0; background:rgba(8,4,0,0.55); z-index:100; backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); animation:fadeIn 0.2s ease; }
+    .detail-sheet { position:fixed; bottom:0; left:0; right:0; background:var(--cream); border-radius:26px 26px 0 0; max-height:93dvh; overflow-y:auto; z-index:101; animation:slideUp 0.35s cubic-bezier(0.32,0.72,0,1); padding-bottom:max(env(safe-area-inset-bottom,0px),20px); box-shadow:0 -8px 40px rgba(20,10,0,0.2); }
+    .sheet-handle { width:42px; height:4.5px; background:var(--border); border-radius:3px; margin:14px auto 0; }
+    .onboard-screen { position:fixed; inset:0; background:var(--cream); z-index:200; display:flex; flex-direction:column; animation:fadeIn 0.4s ease; }
+    .milestone-item { display:flex; align-items:center; gap:14px; padding:14px 16px; border-radius:12px; border:1.5px solid var(--border-soft); background:var(--warm-white); }
+    .milestone-item.reached { background:var(--sage-pale); border-color:var(--sage-light); }
+    .anim-fade-up { animation:fadeUp 0.45s ease both; }
+    .anim-scale-in { animation:scaleIn 0.4s ease both; }
+    .anim-bloom { animation:bloomIn 0.6s cubic-bezier(0.34,1.56,0.64,1) both; }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+<script type="text/babel">
+const { useState, useEffect, useCallback } = React;
+const HABITS=[{id:"1",title:"The Intentional Sleep",category:"Personal Habits & The Home",categorySlug:"personal",emoji:"🌙",shortDesc:"He approached sleep with profound intentionality — not as an unconscious collapse, but as a deliberate act of surrender.",story:"Rather than yielding to sleep as an unconscious collapse, the Prophet ﷺ approached it with profound intentionality. He rested on a humble leather mattress stuffed with coarse palm fibers, categorically rejecting the luxurious silk bedding typical of Byzantine monarchs. In preparation for sleep, he performed Wudu (ritual ablution), ensuring he ended his day in a state of physical and spiritual purity. He then laid on his right side, placing his right hand gently beneath his right cheek — a posture that modern somnology increasingly acknowledges for its physiological benefits. As he settled, he would utter: \"Allahumma bismika amutu wa ahya\" (O Allah, in Your name I die and I live).",modernApplication:"Create a deliberate 'digital sunset' 30 minutes before bed. Put the phone face-down, perform wudu or wash your face, and lie on your right side. Replace the doom-scroll with a short du'a or reflection. This single transition ritual signals to your nervous system that the day is truly done.",citation:"Sahih al-Bukhari, Hadith 247; Ibn al-Qayyim, Zad al-Ma'ad",sunnahLink:"https://sunnah.com/bukhari:247",tags:["sleep","routine","night","purification"]},{id:"2",title:"Waking to Wonder",category:"Personal Habits & The Home",categorySlug:"personal",emoji:"🌅",shortDesc:"His first waking act was to anchor his consciousness in divine majesty — looking to the sky and reciting verses about creation.",story:"His transition from sleep to wakefulness was equally deliberate. Upon waking in the pre-dawn stillness, he would sit up and physically wipe the remnants of sleep from his face with his hands. He would then turn his gaze toward the sky, immediately grounding his consciousness in the cosmos by reciting the final ten verses of Surah Aal-Imran (Quran 3:190-200). His first spoken words were an articulation of profound gratitude: \"Al-hamdu Lillah alladhi ahyana ba'd ma amatana wa ilayhi Al-nushur\" (All praise is for Allah who gave us life after having taken it from us).",modernApplication:"Before checking your phone, sit up slowly and look out a window or toward the sky. Take three conscious breaths. Let your first thought be gratitude for being alive. This 60-second 'wonder ritual' rewires the brain's default morning response away from anxiety and toward presence.",citation:"Sahih al-Bukhari, Hadith 183; Quran 3:190-200",sunnahLink:"https://sunnah.com/bukhari:183",tags:["morning","gratitude","mindfulness","dhikr"]},{id:"3",title:"The Miswak Threshold",category:"Personal Habits & The Home",categorySlug:"personal",emoji:"🏠",shortDesc:"The moment he crossed the threshold of his home, his very first action was to cleanse his mouth — a psychological transition ritual.",story:"Upon crossing the threshold of his home, the Prophet's ﷺ very first action was to use the Miswak. Aisha reported that whenever he entered his house, he would immediately cleanse his mouth. This served as a psychological mechanism to transition from the dusty, demanding public sphere into the sanctity of the home, ensuring he greeted his family in the most pleasant and refined state possible.",modernApplication:"Establish a 'decompression threshold' habit the moment you walk through your front door: change clothes, freshen up, and consciously set down the stress of the workday. This physical ritual signals to your family — and your own nervous system — that you have fully arrived home.",citation:"Sahih Muslim, Hadith 253; Musnad Ahmad 26194",sunnahLink:"https://sunnah.com/muslim:253",tags:["home","family","hygiene","transition","presence"]},{id:"4",title:"The Serving Leader",category:"Personal Habits & The Home",categorySlug:"personal",emoji:"🧵",shortDesc:"He mended his own clothes, milked the sheep, and served himself — the leader of a nation doing household chores without a second thought.",story:"When asked what the Prophet ﷺ did when he was alone with his family, Aisha summarized with striking clarity: \"He was a human being like any other; he would clean his garment, milk his sheep, and serve himself.\" He did not view household chores as beneath his prophetic dignity. Narrations confirm he would stitch his own garments, mend his own leather shoes, repair his water bucket, and busy himself in the service of his family right up until the call to prayer was made.",modernApplication:"No matter your corporate rank or community status, engage in mundane household chores — washing dishes, folding laundry, preparing a meal — without viewing these tasks as beneath you. The dissolution of ego-driven domestic hierarchy is one of the most powerful acts of love you can perform for your family.",citation:"Musnad Ahmad, Hadith 26194; Sahih al-Bukhari, Hadith 676",sunnahLink:"https://sunnah.com/bukhari:676",tags:["home","humility","service","family","household"]},{id:"5",title:"Grace at the Table",category:"Personal Habits & The Home",categorySlug:"personal",emoji:"🍽️",shortDesc:"He never criticized any food placed before him. If he liked it, he ate. If not, he left it without a word of complaint.",story:"Abu Huraira documented: \"The Prophet ﷺ never criticized any food presented to him. If he liked it, he would eat it; otherwise, he would leave it without expressing his dislike.\" If a meal was delayed or completely absent, he exhibited no frustration. On days when he found no food prepared in the house, he would calmly declare, 'Then, I am fasting,' transforming a moment of domestic scarcity into an act of voluntary worship.",modernApplication:"Practice a zero-complaint policy at the dinner table. If a meal isn't to your taste, eat what you can and say nothing — or find one genuine thing to appreciate about it. This single habit creates an atmosphere of psychological safety where family members feel their efforts are seen and valued.",citation:"Sahih al-Bukhari, Hadith 5409; Sahih Muslim, Hadith 2064",sunnahLink:"https://sunnah.com/bukhari:5409",tags:["food","gratitude","home","manners","patience"]},{id:"6",title:"Romantic Micro-Gestures",category:"Interpersonal Relationships",categorySlug:"relationships",emoji:"💛",shortDesc:"He would find the exact spot where Aisha's lips touched a vessel, and place his own lips there. Small acts of intentional love.",story:"The romantic disposition of the Prophet ﷺ was marked by profound tenderness and intentional micro-gestures. He would wait for Aisha to drink from a vessel, locate the exact spot where her lips had touched the rim, and place his own lips on that very spot to drink. He used endearing nicknames — affectionately calling Aisha \"Humaira\" (the rosy-cheeked one) — and he famously raced her in the desert, losing in their youth and winning years later, playfully remarking: \"This is for that.\"",modernApplication:"Revive the art of intentional micro-romance. It's not grand gestures — it's remembering how your spouse takes their coffee, sitting on their side of the couch, texting a memory mid-day. These small, deliberate acts of attunement communicate: 'I see you. I choose you. Every day.'",citation:"Sunan Abi Dawud, Hadith 19; Ash-Shamail Al-Muhammadiyyah",sunnahLink:"https://sunnah.com/abudawud:19",tags:["marriage","love","romance","spouse","intimacy"]},{id:"7",title:"De-escalating with Grace",category:"Interpersonal Relationships",categorySlug:"relationships",emoji:"🕊️",shortDesc:"When Aisha broke a dish in jealousy before guests, he smiled, got on his knees, and quietly cleaned it up.",story:"During a gathering, another wife sent a beautifully prepared dish to the Prophet ﷺ and his guests. Overcome with jealousy, Aisha struck the servant's hand, shattering the plate. Instead of exploding in anger, the Prophet ﷺ simply smiled, got down on his knees, and began gathering the broken pieces, telling his guests: \"Your mother became jealous. Eat.\" He then quietly replaced the broken plate from Aisha's house — resolving the incident with immaculate justice and profound psychological grace.",modernApplication:"When a domestic dispute escalates in front of others, resist the urge to 'win.' Choose to de-escalate publicly and address privately. Clean up a mess, literally or figuratively, without announcing your sacrifice.",citation:"Sunan an-Nasa'i, Hadith 3408; Ash-Shamail Al-Muhammadiyyah",sunnahLink:"https://sunnah.com/nasai:3408",tags:["marriage","conflict","patience","de-escalation","emotional-intelligence"]},{id:"8",title:"Greeting the Children First",category:"Interpersonal Relationships",categorySlug:"relationships",emoji:"🐦",shortDesc:"He would walk through Medina's streets and initiate the greeting of peace with the children playing.",story:"In 7th-century Arabia, children were frequently marginalized. The Prophet ﷺ systematically dismantled this through his public behavior. He was known to walk through the streets of Medina, actively seek out children playing, and initiate the greeting of Salaam with them. When he noticed a young boy, Abu Umair, grieving over the death of his pet bird (Nughayr), he stopped to console him, playfully rhyming: \"O Abu Umair, what did the Nughayr do?\" — prioritizing one child's emotional pain over his own schedule.",modernApplication:"When you encounter a child, get down to their level and greet them first. Ask about something specific to their world: a toy, a friend, a show they like. This single act communicates to a child that they are significant, seen, and valued in the adult world.",citation:"Sunan Abi Dawud, Hadith 4969; Al-Adab Al-Mufrad, Hadith 253",sunnahLink:"https://sunnah.com/adab:253",tags:["children","kindness","parenting","community","empathy"]},{id:"9",title:"The Prolonged Prostration",category:"Interpersonal Relationships",categorySlug:"relationships",emoji:"🤲",shortDesc:"During prayer, a child climbed his back. He prolonged the prostration until the child was satisfied — then calmly continued.",story:"During a congregational prostration (Sujud), a child climbed onto the back of the Prophet ﷺ. He prolonged the prostration so significantly that companions feared something had happened. When asked, he clarified: \"Nothing at all happened, but my son was on my back and I did not wish to disturb him until he had had enough.\" He also stated: \"When I stand for prayer, I intend to prolong it, but on hearing the cries of a child, I cut it short, as I dislike to trouble the child's mother.\"",modernApplication:"When a child interrupts something important — a meeting, a prayer, a conversation — honor the interruption before resuming. This communicates to the child that they are not an inconvenience. The brief pause costs you seconds; the message it sends them will last a lifetime.",citation:"Sunan an-Nasa'i, Hadith 1141; Sahih al-Bukhari, Hadith 707",sunnahLink:"https://sunnah.com/bukhari:707",tags:["children","prayer","patience","parenting","mercy"]},{id:"10",title:"Whole-Body Listening",category:"Interpersonal Relationships",categorySlug:"relationships",emoji:"👂",shortDesc:"When someone spoke to him, he turned his entire torso to face them — absolute, undivided physical and psychological attention.",story:"When someone called out to him or spoke to him, the Prophet ﷺ did not merely turn his neck. He turned his entire torso to face the speaker squarely, granting them his absolute, undivided physical and psychological attention. His speech was equally disciplined: he would allow a speaker to finish their thought entirely without interruption. Only when the speaker had completely exhausted their words would he ask, \"Have you finished?\" before delivering his response.",modernApplication:"Practice 'whole-body listening.' When someone speaks to you, physically turn toward them — put down your phone, close the laptop, make eye contact. Allow them to finish completely before formulating your response. This single habit, applied consistently, will transform your relationships.",citation:"Ash-Shamail Al-Muhammadiyyah; Al-Adab Al-Mufrad, Hadith 1115",sunnahLink:"https://sunnah.com/adab:1115",tags:["communication","listening","presence","relationships","emotional-intelligence"]},{id:"11",title:"The Perpetual Smile",category:"Interpersonal Relationships",categorySlug:"relationships",emoji:"☀️",shortDesc:"His resting expression was perpetually cheerful. 'I have never seen anyone smile more than Allah's Messenger.'",story:"The physical presence of the Prophet ﷺ was described by companions as perpetually cheerful. Abdullah ibn Al-Harith noted: \"I have never seen anyone smile more than Allah's Messenger.\" Yet his joy was refined — predominantly a broad smile that illuminated his face, with companions poetically likening his teeth to hailstones. His walk was purposeful and energetic — brisk, lifting his feet firmly and leaning slightly forward, as if descending a slope.",modernApplication:"Consciously soften your resting expression. Most people's default face communicates stress, distance, or disapproval. A gentle, relaxed facial expression is one of the most powerful gifts you can give those around you — it signals safety, warmth, and welcome.",citation:"Ash-Shamail Al-Muhammadiyyah, Chapter 9; Jami' at-Tirmidhi, Hadith 3641",sunnahLink:"https://sunnah.com/tirmidhi:3641",tags:["demeanor","smile","community","character","joy"]},{id:"12",title:"Ethical Commerce",category:"Commerce & Public Life",categorySlug:"commerce",emoji:"🤝",shortDesc:"He prayed for Allah's mercy upon the lenient buyer, seller, and debt-collector. Ease was his commercial ethic.",story:"The Prophet ﷺ actively participated in the marketplace, modeling an attitude of grace, leniency, and absolute honesty: \"May Allah's mercy be on him who is lenient in his buying, selling, and in demanding back his money.\" He once encountered a companion riding a tired camel, made du'a for it, then bought the camel and sent payment above the agreed price — embodying overdelivering on a transaction.",modernApplication:"In every commercial transaction, ask: 'Am I being the lenient party here?' In negotiations, invoices, and debt collection, build in generosity. If you owe someone money, pay them back with a gift of gratitude. This is not weakness; it is prophetic financial character.",citation:"Sahih al-Bukhari, Hadith 2076; Sahih Muslim, Hadith 1579",sunnahLink:"https://sunnah.com/bukhari:2076",tags:["commerce","business","ethics","finance","generosity"]},{id:"13",title:"Smiling at Rudeness",category:"Emotional Intelligence & Crisis",categorySlug:"emotional",emoji:"🧘",shortDesc:"A Bedouin grabbed his cloak so violently it left a mark on his neck. The Prophet ﷺ turned — and smiled.",story:"During his time distributing wealth, a Bedouin grabbed the Prophet's ﷺ cloak with such force it left a visible red mark on his neck, demanding rudely: \"Muhammad! Give me some of Allah's wealth!\" The Prophet ﷺ turned to the man, smiled, and instructed his companions to give him what he needed. There was no anger, no public humiliation, and no wounded pride. Only de-escalation and generosity.",modernApplication:"The next time someone is rude or aggressive with you publicly — a difficult customer, an aggressive driver, an impatient colleague — practice the pause before the response. Let a beat pass. A calm, measured response to hostility is not weakness; it is the highest form of social mastery.",citation:"Sahih al-Bukhari, Hadith 3149; Ash-Shamail Al-Muhammadiyyah",sunnahLink:"https://sunnah.com/bukhari:3149",tags:["patience","anger","emotional-intelligence","public-life","character"]},{id:"14",title:"Witnessing Grief Fully",category:"Emotional Intelligence & Crisis",categorySlug:"emotional",emoji:"💧",shortDesc:"When his infant son Ibrahim died in his arms, he wept openly: 'The eyes weep, the heart grieves — and we say only what pleases Allah.'",story:"When the Prophet's ﷺ infant son Ibrahim passed away in his arms, he did not suppress his tears. He wept openly and visibly. When companions appeared surprised, he explained: \"The eyes weep, the heart grieves, and we say only what pleases our Lord. O Ibrahim, we are grieved by your parting.\" This was a man who led armies and arbitrated the fates of nations, weeping without shame over the death of a child.",modernApplication:"Give yourself full permission to grieve. Suppressing tears — especially for men — is a cultural norm with no Prophetic basis. Acknowledging loss, sitting with pain, and expressing grief openly (without complaint against Allah) is emotional wholeness.",citation:"Sahih al-Bukhari, Hadith 1303; Sahih Muslim, Hadith 2315",sunnahLink:"https://sunnah.com/bukhari:1303",tags:["grief","emotional-intelligence","loss","vulnerability","men-mental-health"]},{id:"15",title:"The First to Investigate",category:"Emotional Intelligence & Crisis",categorySlug:"emotional",emoji:"🐎",shortDesc:"When a loud noise woke Medina in panic, he was already riding out bareback — alone — before the guards even stirred.",story:"When a terrifying noise woke the city of Medina in the middle of the night, causing mass panic, the Prophet ﷺ was the very first to ride out — bareback on a slow horse — to investigate the perimeter. He returned before the panicking crowd even reached the perceived danger, calmly reassuring the terrified residents: \"Do not be afraid. Do not be afraid.\"",modernApplication:"In a crisis, before others have processed what is happening, be the person who moves toward the problem to assess it calmly. The first calm voice that says 'I've assessed this, here is what we know' is worth more than any other resource.",citation:"Sahih al-Bukhari, Hadith 2908; Sahih Muslim, Hadith 2307",sunnahLink:"https://sunnah.com/bukhari:2908",tags:["courage","leadership","crisis","community","action"]},{id:"16",title:"The Grateful Slave",category:"Emotional Intelligence & Crisis",categorySlug:"emotional",emoji:"⭐",shortDesc:"He prayed until his feet cracked and bled. When asked why — since all was forgiven — he replied: 'Should I not be a grateful slave?'",story:"The Prophet's ﷺ dedication to the night prayer (Tahajjud) was so intense that he would stand in prayer until his feet swelled and cracked from exertion. When Aisha asked why he endured such hardship given all his shortcomings were already forgiven, he replied: \"Should I not be a grateful slave?\" His worship was not transactional. It arose from sheer, overflowing gratitude for existence itself.",modernApplication:"Examine your own acts of worship and service. Are they primarily transactional? Practice shifting the intention to pure gratitude. Do something beautiful — a prayer, an act of charity, a kind gesture — not because you need something, but simply because you are grateful to be alive and capable.",citation:"Sahih al-Bukhari, Hadith 4836; Sahih Muslim, Hadith 2819",sunnahLink:"https://sunnah.com/bukhari:4836",tags:["gratitude","worship","intention","spiritual","motivation"]},{id:"17",title:"Defending the Voiceless",category:"The Natural World & Environment",categorySlug:"environment",emoji:"🐫",shortDesc:"A camel wept upon seeing him, complaining of overwork. He confronted the owner directly: 'Fear Allah regarding this creature.'",story:"The Prophet's ﷺ empathy extended deeply into the animal kingdom. Once, companions took the chicks of a bird, causing the mother bird to flutter in visible distress. The Prophet ﷺ immediately commanded: \"Return them to her at once!\" On another occasion, he found a starving, overworked camel that began to weep upon seeing him. He confronted the owner directly, warning him to fear Allah regarding his treatment of the defenseless creature.",modernApplication:"Actively speak up when you witness mistreatment of animals or exploitation of those who cannot defend themselves. The Prophetic standard is not passive witnessing. It is direct, compassionate intervention.",citation:"Sunan Abi Dawud, Hadith 2675 and 2549",sunnahLink:"https://sunnah.com/abudawud:2675",tags:["animals","environment","advocacy","compassion","justice"]},{id:"18",title:"Conserving the Sacred River",category:"The Natural World & Environment",categorySlug:"environment",emoji:"💦",shortDesc:"He forbade wasting water during ablution — even on the banks of a powerfully flowing river. Abundance is not permission to waste.",story:"The Prophet ﷺ was strict regarding resource management. He explicitly commanded his companions not to waste water, even when performing ablution on the banks of a powerfully flowing river. The abundant water all around them did not change his principle: waste is waste, regardless of apparent abundance. He modeled using the minimum necessary and framed excess consumption as a transgression with moral weight.",modernApplication:"Turn off the tap while brushing your teeth, be conscious of resource consumption — not just for environmental reasons, but as an act of worship rooted in the Prophetic example. The river is still flowing; the standard still applies.",citation:"Sunan Ibn Majah, Hadith 425; Musnad Ahmad, Hadith 7065",sunnahLink:"https://sunnah.com/ibnmajah:425",tags:["environment","water","conservation","worship","character"]},{id:"19",title:"The Art of the Farewell",category:"Nuanced Personal Expressions",categorySlug:"nuanced",emoji:"👋",shortDesc:"He never rose from a gathering without sincerely inquiring about the needs of each person present before departing.",story:"The Prophet ﷺ treated every gathering as a trust. He was known to never rise to leave without sincerely inquiring about the needs of each person present. After long gatherings, he would conclude with the expiation of the assembly (Kaffaratul-Majlis): \"Subhanakallahumma wa bihamdika, ash-hadu an la ilaha illa anta, astaghfiruka wa atubu ilayk.\" — a spiritual seal on the gathering and a conscious acknowledgment that any shortcomings were offered up for forgiveness.",modernApplication:"Before leaving any gathering — a dinner party, a work meeting, a family visit — pause and ask: 'Is there anything anyone needs?' Then close with a small moment of gratitude. These final 60 seconds transform a routine goodbye into a meaningful farewell people will remember.",citation:"Jami' at-Tirmidhi, Hadith 3433; Sunan Abi Dawud, Hadith 4858",sunnahLink:"https://sunnah.com/tirmidhi:3433",tags:["social","gatherings","endings","presence","community"]},{id:"20",title:"Laughing without Losing Dignity",category:"Nuanced Personal Expressions",categorySlug:"nuanced",emoji:"😄",shortDesc:"He had a sharp, warm sense of humor and used it often. Humor is not frivolity; it is a form of emotional intelligence.",story:"The Prophet ﷺ had a sharp, playful, and warm sense of humor. In one famous exchange, an elderly woman asked if she would enter Paradise. He teased her: \"O mother, there are no old women in Paradise.\" She began to weep, until he completed the joke: \"Did you not read that Allah will create them anew, making them virgins, youthful companions?\" In another narration, he told a man who wanted to borrow a camel: \"I will give you the child of a camel\" — then smiled and clarified: \"Every camel is the child of a camel.\"",modernApplication:"Humor is not frivolity — it is a form of emotional intelligence. Use wit and warmth in your interactions, particularly with the elderly and children. The goal of the joke is always to end with the other person smiling, never to leave them in doubt.",citation:"Jami' at-Tirmidhi, Hadith 3893; Ash-Shamail Al-Muhammadiyyah",sunnahLink:"https://sunnah.com/tirmidhi:3893",tags:["humor","joy","character","social","lightness"]}];
+const CATEGORIES=[{slug:"all",label:"All",emoji:"✨"},{slug:"personal",label:"Personal & Home",emoji:"🏠"},{slug:"relationships",label:"Relationships",emoji:"💛"},{slug:"commerce",label:"Commerce",emoji:"🤝"},{slug:"emotional",label:"Emotional Intelligence",emoji:"🧘"},{slug:"environment",label:"Nature & Environment",emoji:"🌿"},{slug:"nuanced",label:"Nuanced Expressions",emoji:"✨"}];
+const CC={personal:{bg:"var(--gold-pale)",color:"#A06800",border:"#E8C042"},relationships:{bg:"var(--terra-pale)",color:"var(--terra)",border:"var(--terra-light)"},commerce:{bg:"var(--teal-pale)",color:"var(--teal)",border:"#3A9A8A"},emotional:{bg:"var(--sage-pale)",color:"var(--sage)",border:"var(--sage-light)"},environment:{bg:"#E8F4E8",color:"#2A6A3A",border:"#5A9A5A"},nuanced:{bg:"var(--parchment)",color:"var(--ink-soft)",border:"var(--border)"}};
+function load(k,fb){try{const v=localStorage.getItem(k);return v!==null?JSON.parse(v):fb;}catch{return fb;}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch{}}
+function Particles({active}){if(!active)return null;const pts=[0,1,2,3,4,5,6,7].map(i=>{const a=(i/8)*360;return{tx:Math.round(Math.cos(a*Math.PI/180)*26),ty:Math.round(Math.sin(a*Math.PI/180)*26),color:["#E8A020","#7AA05A","#E8855A","#F5C842","#5A7A4A","#C4622D","#E8C042","#3A9A8A"][i]};});return <div style={{position:"absolute",inset:0,pointerEvents:"none",overflow:"visible",zIndex:10}}>{pts.map((p,i)=><div key={i} style={{position:"absolute",top:"50%",left:"50%",width:7,height:7,borderRadius:"50%",background:p.color,"--tx":`${p.tx}px`,"--ty":`${p.ty}px`,animation:`particleBurst 0.55s ${i*0.03}s cubic-bezier(0,0.5,0.5,1) both`}}/>)}</div>;}
+function CPill({slug,label}){const c=CC[slug]||CC.nuanced;return <span className="category-pill" style={{background:c.bg,color:c.color,border:`1px solid ${c.border}`}}>{label}</span>;}
+function HabitCard({habit,inRoutine,onAdd,onClick,delay=0}){const c=CC[habit.categorySlug]||CC.nuanced;return(<div className="card anim-fade-up" style={{animationDelay:`${delay}ms`}} onClick={()=>onClick(habit)}><div style={{padding:"17px 17px 13px",borderLeft:`4px solid ${c.color}`}}><div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",gap:10,marginBottom:9}}><div style={{display:"flex",alignItems:"flex-start",gap:10,flex:1,minWidth:0}}><span style={{fontSize:30,lineHeight:1,flexShrink:0}}>{habit.emoji}</span><div style={{flex:1,minWidth:0}}><h3 className="font-display" style={{fontSize:16,fontWeight:600,color:"var(--ink)",lineHeight:1.25,marginBottom:5}}>{habit.title}</h3><CPill slug={habit.categorySlug} label={habit.category.split("&")[0].trim().replace("The Natural World ","Nature ")}/></div></div><button onClick={e=>{e.stopPropagation();onAdd(habit.id);}} style={{flexShrink:0,width:32,height:32,borderRadius:"50%",border:`1.5px solid ${inRoutine?c.color:"var(--border)"}`,background:inRoutine?c.bg:"transparent",color:inRoutine?c.color:"var(--ink-muted)",fontSize:inRoutine?14:18,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",transition:"all 0.2s",fontFamily:"DM Sans,sans-serif",fontWeight:600}}>{inRoutine?"✓":"+"}</button></div><p style={{fontSize:13.5,color:"var(--ink-soft)",lineHeight:1.55,marginBottom:9}}>{habit.shortDesc}</p><p style={{fontSize:11,color:"var(--ink-muted)",fontStyle:"italic"}}>📚 {habit.citation}</p></div></div>);}
+function DetailSheet({habit,inRoutine,onAdd,onClose}){if(!habit)return null;const c=CC[habit.categorySlug]||CC.nuanced;const share=()=>{const t=`✨ ${habit.title}\n\n${habit.shortDesc}\n\n${habit.story.slice(0,240)}...\n\n📚 Source: ${habit.citation}\n\n🌱 Discover Prophetic habits on Sublime Character`;if(navigator.share)navigator.share({title:habit.title,text:t});else window.open(`https://wa.me/?text=${encodeURIComponent(t)}`,"_blank");};return(<><div className="detail-overlay" onClick={onClose}/><div className="detail-sheet"><div className="sheet-handle"/><div style={{padding:"18px 20px 0",borderBottom:"1px solid var(--border-soft)",paddingBottom:16}}><div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10}}><CPill slug={habit.categorySlug} label={habit.category}/><button onClick={onClose} style={{background:"none",border:"none",fontSize:22,cursor:"pointer",color:"var(--ink-muted)",padding:"4px 8px",borderRadius:8}}>✕</button></div><div style={{display:"flex",alignItems:"center",gap:14}}><span style={{fontSize:46,lineHeight:1}}>{habit.emoji}</span><h2 className="font-display" style={{fontSize:22,fontWeight:700,lineHeight:1.2,color:"var(--ink)"}}>{habit.title}</h2></div></div><div style={{padding:"20px"}}><p style={{fontSize:11,fontWeight:700,letterSpacing:"0.1em",textTransform:"uppercase",color:"var(--ink-muted)",marginBottom:9}}>The Prophetic Narrative</p><p style={{fontSize:14.5,lineHeight:1.75,color:"var(--ink-mid)",marginBottom:22}}>{habit.story}</p><div style={{background:`linear-gradient(135deg,${c.bg},var(--warm-white))`,border:`1.5px solid ${c.border}`,borderRadius:14,padding:"16px",marginBottom:18}}><div style={{display:"flex",alignItems:"center",gap:8,marginBottom:9}}><span style={{fontSize:18}}>🌱</span><p style={{fontSize:11,fontWeight:700,letterSpacing:"0.08em",textTransform:"uppercase",color:c.color}}>Modern Application</p></div><p style={{fontSize:14,lineHeight:1.65,color:"var(--ink-mid)"}}>{habit.modernApplication}</p></div><div style={{background:"var(--parchment)",border:"1.5px solid var(--border)",borderRadius:12,padding:"13px 15px",marginBottom:22}}><div style={{display:"flex",alignItems:"center",gap:8,marginBottom:6}}><span style={{fontSize:14}}>📚</span><span style={{fontSize:11,fontWeight:700,letterSpacing:"0.08em",textTransform:"uppercase",color:"var(--ink-muted)"}}>Exact Source</span></div><p style={{fontSize:13,color:"var(--ink-soft)",fontStyle:"italic",lineHeight:1.5,marginBottom:8}}>{habit.citation}</p><a href={habit.sunnahLink} target="_blank" rel="noopener noreferrer" style={{fontSize:12,color:"var(--teal)",textDecoration:"none",display:"inline-flex",alignItems:"center",gap:4}} onClick={e=>e.stopPropagation()}>View on Sunnah.com →</a></div><div style={{display:"flex",flexDirection:"column",gap:10}}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+  ><button className={`fab ${inRoutine?"fab-secondary":"fab-primary"}`} onClick={()=>{onAdd(habit.id);onClose();}}>{inRoutine?"- Remove from Routine":"+ Add to Daily Routine"}</button><button className="fab fab-secondary" onClick={share} style={{background:"transparent",border:"1.5px solid var(--border)",color:"var(--ink-mid)"}}>📤 Share</button></div></div></div></>);
+}
+
+function App() {
+  const [hasOnboarded, setHasOnboarded] = useState(() => load("sc_onboarded", false));
+  const [routine, setRoutine] = useState(() => load("sc_routine", []));
+  const [history, setHistory] = useState(() => load("sc_history", {}));
+  const [tab, setTab] = useState("routine");
+  const [search, setSearch] = useState("");
+  const [cat, setCat] = useState("all");
+  const [detailHabit, setDetailHabit] = useState(null);
+  const [particlesActive, setParticlesActive] = useState(false);
+
+  useEffect(() => { save("sc_routine", routine); }, [routine]);
+  useEffect(() => { save("sc_history", history); }, [history]);
+  useEffect(() => { save("sc_onboarded", hasOnboarded); }, [hasOnboarded]);
+
+  const today = new Date().toISOString().split("T")[0];
+  const todayCompleted = history[today] || [];
+
+  const toggleRoutine = (id) => {
+    setRoutine(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
+  };
+
+  const toggleCompletion = (id) => {
+    setHistory(prev => {
+      const day = prev[today] || [];
+      const isDone = day.includes(id);
+      if (!isDone) {
+        setParticlesActive(true);
+        setTimeout(() => setParticlesActive(false), 1000);
+      }
+      return { ...prev, [today]: isDone ? day.filter(x => x !== id) : [...day, id] };
+    });
+  };
+
+  const streak = Object.keys(history).filter(d => history[d].length > 0).length;
+
+  if (!hasOnboarded) {
+    return (
+      <div className="onboard-screen">
+        <div style={{flex:1, display:"flex", flexDirection:"column", justifyContent:"center", padding:30}}>
+          <div className="anim-bloom" style={{fontSize:80, textAlign:"center", marginBottom:20}}>🌙</div>
+          <h1 className="font-display anim-fade-up" style={{fontSize:32, textAlign:"center", color:"var(--ink)", marginBottom:16, animationDelay:"0.2s"}}>Sublime Character</h1>
+          <p className="anim-fade-up" style={{fontSize:16, textAlign:"center", color:"var(--ink-mid)", lineHeight:1.6, animationDelay:"0.3s"}}>Discover the daily habits, manners, and emotional wisdom of Prophet Muhammad ﷺ.</p>
+        </div>
+        <div style={{padding:"0 24px 40px"}}>
+          <button className="fab fab-primary anim-scale-in" style={{animationDelay:"0.5s"}} onClick={() => setHasOnboarded(true)}>Begin Journey</button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <Particles active={particlesActive} />
+      
+      {tab === "discover" && (
+        <div className="screen anim-fade-up" style={{padding:"20px 16px"}}>
+          <h1 className="font-display" style={{fontSize:28, marginBottom:16}}>Discover Habits</h1>
+          <input type="text" className="search-input" placeholder="Search habits..." value={search} onChange={e => setSearch(e.target.value)} style={{marginBottom:16}} />
+          <div style={{display:"flex", gap:8, overflowX:"auto", paddingBottom:12, margin:"0 -16px", padding:"0 16px"}} className="hide-scrollbar">
+            {CATEGORIES.map(c => (
+              <button key={c.slug} onClick={() => setCat(c.slug)} style={{padding:"6px 16px", borderRadius:20, border:`1.5px solid ${cat===c.slug ? "var(--terra)" : "var(--border)"}`, background:cat===c.slug ? "var(--terra-pale)" : "transparent", color:cat===c.slug ? "var(--terra)" : "var(--ink-muted)", whiteSpace:"nowrap", fontWeight:600, cursor:"pointer"}}>{c.emoji} {c.label}</button>
+            ))}
+          </div>
+          <div style={{display:"flex", flexDirection:"column", gap:16, marginTop:8}}>
+            {HABITS.filter(h => (cat==="all" || h.categorySlug===cat) && h.title.toLowerCase().includes(search.toLowerCase())).map((h, i) => (
+              <HabitCard key={h.id} habit={h} inRoutine={routine.includes(h.id)} onAdd={toggleRoutine} onClick={setDetailHabit} delay={Math.min(i*50, 500)} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {tab === "routine" && (
+        <div className="screen anim-fade-up" style={{padding:"20px 16px"}}>
+          <h1 className="font-display" style={{fontSize:28, marginBottom:8}}>Daily Routine</h1>
+          <p style={{color:"var(--ink-muted)", marginBottom:20, fontWeight:500}}>{new Date().toLocaleDateString('en-US', {weekday:'long', month:'long', day:'numeric'})}</p>
+          
+          {routine.length === 0 ? (
+            <div style={{textAlign:"center", padding:"40px 20px", marginTop:40}}>
+              <div className="anim-bloom" style={{fontSize:48, marginBottom:16}}>🌱</div>
+              <p style={{color:"var(--ink-mid)", marginBottom:24, lineHeight:1.6}}>Your routine is empty. Discover prophetic habits to begin building your character.</p>
+              <button className="fab fab-primary" onClick={() => setTab("discover")}>Discover Habits</button>
+            </div>
+          ) : (
+            <div style={{display:"flex", flexDirection:"column", gap:12}}>
+              {routine.map(id => {
+                const habit = HABITS.find(h => h.id === id);
+                if(!habit) return null;
+                const isDone = todayCompleted.includes(id);
+                return (
+                  <div key={id} className={`checklist-item ${isDone ? "completed" : ""}`} onClick={() => toggleCompletion(id)}>
+                    <div className={`check-circle ${isDone ? "done" : ""}`}>
+                      {isDone && <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" style={{animation:"checkDraw 0.4s ease forwards"}}><polyline points="20 6 9 17 4 12"></polyline></svg>}
+                    </div>
+                    <div style={{flex:1}} onClick={e => { e.stopPropagation(); setDetailHabit(habit); }}>
+                      <h4 style={{fontSize:16, fontWeight:600, color:isDone ? "var(--sage)" : "var(--ink)", marginBottom:4}}>{habit.title}</h4>
+                      <p style={{fontSize:13, color:isDone ? "var(--sage-light)" : "var(--ink-muted)", lineHeight:1.4}}>{habit.shortDesc.slice(0, 55)}...</p>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          )}
+        </div>
+      )}
+
+      {tab === "progress" && (
+        <div className="screen anim-fade-up" style={{padding:"20px 16px"}}>
+           <h1 className="font-display" style={{fontSize:28, marginBottom:20}}>Your Progress</h1>
+           <div className="streak-bg" style={{padding:24, color:"white", marginBottom:24}}>
+             <div className="geo-bg" />
+             <p style={{fontSize:14, fontWeight:600, textTransform:"uppercase", letterSpacing:1.5, opacity:0.9, marginBottom:8}}>Consistency Streak</p>
+             <div style={{display:"flex", alignItems:"baseline", gap:8}}>
+               <span className="font-display anim-scale-in" style={{fontSize:48, fontWeight:700}}>{streak}</span>
+               <span style={{fontSize:18, opacity:0.9}}>Days</span>
+             </div>
+           </div>
+           
+           <h2 className="font-display" style={{fontSize:20, marginBottom:16}}>Milestones</h2>
+           <div style={{display:"flex", flexDirection:"column", gap:12}}>
+             <div className={`milestone-item ${streak >= 1 ? "reached" : ""}`}>
+               <div style={{fontSize:24}}>{streak >= 1 ? "🌱" : "🌱"}</div>
+               <div>
+                 <h4 style={{fontWeight:600, color:"var(--ink)", marginBottom:4}}>First Step</h4>
+                 <p style={{fontSize:13, color:"var(--ink-muted)"}}>Complete your first habit.</p>
+               </div>
+             </div>
+             <div className={`milestone-item ${streak >= 7 ? "reached" : ""}`}>
+               <div style={{fontSize:24}}>{streak >= 7 ? "🌿" : "🔒"}</div>
+               <div>
+                 <h4 style={{fontWeight:600, color:"var(--ink)", marginBottom:4}}>A Week of Growth</h4>
+                 <p style={{fontSize:13, color:"var(--ink-muted)"}}>Maintain a 7-day streak.</p>
+               </div>
+             </div>
+             <div className={`milestone-item ${streak >= 30 ? "reached" : ""}`}>
+               <div style={{fontSize:24}}>{streak >= 30 ? "🌳" : "🔒"}</div>
+               <div>
+                 <h4 style={{fontWeight:600, color:"var(--ink)", marginBottom:4}}>Rooted in Tradition</h4>
+                 <p style={{fontSize:13, color:"var(--ink-muted)"}}>Maintain a 30-day streak.</p>
+               </div>
+             </div>
+           </div>
+        </div>
+      )}
+
+      <div className="tab-bar">
+        <button className={`tab-btn ${tab === "routine" ? "active" : ""}`} onClick={() => setTab("routine")}>
+          <div className="tab-icon">✨</div>
+          Routine
+        </button>
+        <button className={`tab-btn ${tab === "discover" ? "active" : ""}`} onClick={() => setTab("discover")}>
+          <div className="tab-icon">🧭</div>
+          Discover
+        </button>
+        <button className={`tab-btn ${tab === "progress" ? "active" : ""}`} onClick={() => setTab("progress")}>
+          <div className="tab-icon">📈</div>
+          Progress
+        </button>
+      </div>
+
+      <DetailSheet habit={detailHabit} inRoutine={detailHabit ? routine.includes(detailHabit.id) : false} onAdd={toggleRoutine} onClose={() => setDetailHabit(null)} />
+    </>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+</script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').then(registration => {
+        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+      }, err => {
+        console.log('ServiceWorker registration failed: ', err);
+      });
+    });
+  }
+</script>
+</body>
+</html>
