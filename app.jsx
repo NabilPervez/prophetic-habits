@@ -2,171 +2,9 @@
 // React 18 + CSS-in-JS, zero dependencies beyond React
 // Deployable as static HTML on Netlify/GitHub Pages
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 
 // ─── DATA ────────────────────────────────────────────────────────────────────
-const HABITS = [
-  {
-    id: "1", title: "The Intentional Sleep", category: "Personal Habits & The Home", categorySlug: "personal",
-    emoji: "🌙", shortDesc: "He approached sleep with profound intentionality — not as an unconscious collapse, but as a deliberate act of surrender.",
-    story: "Rather than yielding to sleep as an unconscious collapse, the Prophet ﷺ approached it with profound intentionality. He rested on a humble leather mattress stuffed with coarse palm fibers, categorically rejecting the luxurious silk bedding typical of Byzantine or Sassanid monarchs. In preparation for sleep, he performed Wudu (ritual ablution), ensuring he ended his day in a state of physical and spiritual purity. He then laid on his right side, placing his right hand gently beneath his right cheek — a posture that modern somnology increasingly acknowledges for its physiological benefits. As he settled, he would utter: \"Allahumma bismika amutu wa ahya\" (O Allah, in Your name I die and I live).",
-    modernApplication: "Create a deliberate 'digital sunset' 30 minutes before bed. Put the phone face-down, perform wudu or wash your face, and lie on your right side. Replace the doom-scroll with a short du'a or reflection. This single transition ritual signals to your nervous system that the day is truly done.",
-    citation: "Sahih al-Bukhari, Hadith 247; Ibn al-Qayyim, Zad al-Ma'ad", sunnahLink: "https://sunnah.com/bukhari:247",
-    tags: ["sleep", "routine", "night", "purification"]
-  },
-  {
-    id: "2", title: "Waking to Wonder", category: "Personal Habits & The Home", categorySlug: "personal",
-    emoji: "🌅", shortDesc: "His first waking act was to anchor his consciousness in divine majesty — looking to the sky and reciting verses about creation.",
-    story: "His transition from sleep to wakefulness was equally deliberate. Upon waking in the pre-dawn stillness, he would sit up and physically wipe the remnants of sleep from his face with his hands. He would then turn his gaze toward the sky, immediately grounding his consciousness in the cosmos by reciting the final ten verses of Surah Aal-Imran (Quran 3:190-200), which reflect on the creation of the heavens and the earth. His first spoken words were an articulation of profound gratitude: \"Al-hamdu Lillah alladhi ahyana ba'd ma amatana wa ilayhi Al-nushur\" (All praise is for Allah who gave us life after having taken it from us).",
-    modernApplication: "Before checking your phone, sit up slowly and look out a window or toward the sky. Take three conscious breaths. Let your first thought be gratitude for being alive. This 60-second 'wonder ritual' rewires the brain's default morning response away from anxiety and toward presence.",
-    citation: "Sahih al-Bukhari, Hadith 183; Quran 3:190-200", sunnahLink: "https://sunnah.com/bukhari:183",
-    tags: ["morning", "gratitude", "mindfulness", "dhikr"]
-  },
-  {
-    id: "3", title: "The Miswak Threshold", category: "Personal Habits & The Home", categorySlug: "personal",
-    emoji: "🏠", shortDesc: "The moment he crossed the threshold of his home, his very first action was to cleanse his mouth — a psychological transition ritual.",
-    story: "Upon crossing the threshold of his home, the Prophet's ﷺ very first action was to use the Miswak. Aisha reported that whenever he entered his house, he would immediately cleanse his mouth. This was not merely dental hygiene — it served as a psychological mechanism to transition from the dusty, demanding public sphere into the sanctity of the home, ensuring he greeted his family in the most pleasant and refined state possible. He also applied fragrant oils (Attar), favoring musk, oud, and amber, stating that pleasant fragrance is from the ways of the Prophets.",
-    modernApplication: "Establish a 'decompression threshold' habit the moment you walk through your front door: change clothes, freshen up, and consciously set down the stress of the workday. This physical ritual signals to your family — and your own nervous system — that you have fully arrived home.",
-    citation: "Sahih Muslim, Hadith 253; Musnad Ahmad 26194", sunnahLink: "https://sunnah.com/muslim:253",
-    tags: ["home", "family", "hygiene", "transition", "presence"]
-  },
-  {
-    id: "4", title: "The Serving Leader", category: "Personal Habits & The Home", categorySlug: "personal",
-    emoji: "🧵", shortDesc: "He mended his own clothes, milked the sheep, and served himself — the leader of a nation doing household chores without a second thought.",
-    story: "When asked what the Prophet ﷺ did when he was alone with his family, Aisha summarized with striking clarity: \"He was a human being like any other; he would clean his garment, milk his sheep, and serve himself.\" He did not view household chores as beneath his prophetic dignity. Narrations confirm he would stitch his own garments, mend his own leather shoes, repair his water bucket, and busy himself in the service of his family right up until the call to prayer was made.",
-    modernApplication: "No matter your corporate rank or community status, engage in mundane household chores — washing dishes, folding laundry, preparing a meal — without viewing these tasks as beneath you. The dissolution of ego-driven domestic hierarchy is one of the most powerful acts of love you can perform for your family.",
-    citation: "Musnad Ahmad, Hadith 26194; Sahih al-Bukhari, Hadith 676", sunnahLink: "https://sunnah.com/bukhari:676",
-    tags: ["home", "humility", "service", "family", "household"]
-  },
-  {
-    id: "5", title: "Grace at the Table", category: "Personal Habits & The Home", categorySlug: "personal",
-    emoji: "🍽️", shortDesc: "He never criticized any food placed before him. If he liked it, he ate. If not, he left it without a word of complaint.",
-    story: "Abu Huraira documented: \"The Prophet ﷺ never criticized any food presented to him. If he liked it, he would eat it; otherwise, he would leave it without expressing his dislike.\" If a meal was delayed or completely absent, he exhibited no frustration. On days when he found no food prepared in the house, he would calmly declare, \"Then, I am fasting,\" transforming a moment of domestic scarcity into an act of voluntary worship.",
-    modernApplication: "Practice a zero-complaint policy at the dinner table. If a meal isn't to your taste, eat what you can and say nothing — or find one genuine thing to appreciate about it. This single habit creates an atmosphere of psychological safety where family members feel their efforts are seen and valued.",
-    citation: "Sahih al-Bukhari, Hadith 5409; Sahih Muslim, Hadith 2064", sunnahLink: "https://sunnah.com/bukhari:5409",
-    tags: ["food", "gratitude", "home", "manners", "patience"]
-  },
-  {
-    id: "6", title: "Romantic Micro-Gestures", category: "Interpersonal Relationships", categorySlug: "relationships",
-    emoji: "💛", shortDesc: "He would find the exact spot where Aisha's lips touched a vessel, and place his own lips there. Small acts of intentional love.",
-    story: "The romantic disposition of the Prophet ﷺ was marked by profound tenderness and intentional micro-gestures. He would wait for Aisha to drink from a vessel, locate the exact spot where her lips had touched the rim, and place his own lips on that very spot to drink. He used endearing nicknames — affectionately calling Aisha \"Humaira\" (the rosy-cheeked one) — and he famously raced her in the desert, losing in their youth and winning years later, playfully remarking: \"This is for that.\"",
-    modernApplication: "Revive the art of intentional micro-romance. It's not grand gestures — it's remembering how your spouse takes their coffee, sitting on their side of the couch, texting a memory mid-day. These small, deliberate acts of attunement communicate: 'I see you. I choose you. Every day.'",
-    citation: "Sunan Abi Dawud, Hadith 19; Ash-Shamail Al-Muhammadiyyah", sunnahLink: "https://sunnah.com/abudawud:19",
-    tags: ["marriage", "love", "romance", "spouse", "intimacy"]
-  },
-  {
-    id: "7", title: "De-escalating with Grace", category: "Interpersonal Relationships", categorySlug: "relationships",
-    emoji: "🕊️", shortDesc: "When Aisha broke a dish in jealousy before guests, he smiled, got on his knees, and quietly cleaned it up.",
-    story: "During a gathering, another wife sent a beautifully prepared dish to the Prophet ﷺ and his guests. Overcome with jealousy, Aisha struck the servant's hand, shattering the plate. Instead of exploding in anger at this public display, the Prophet ﷺ simply smiled, got down on his knees, and began gathering the broken pieces and food, telling his guests: \"Your mother became jealous. Eat.\" He then quietly replaced the broken plate from Aisha's house — resolving the incident with immaculate justice and profound psychological grace.",
-    modernApplication: "When a domestic dispute escalates in front of others, resist the urge to 'win.' Choose to de-escalate publicly and address privately. Clean up a mess, literally or figuratively, without announcing your sacrifice. The absence of retaliation in a moment of embarrassment is one of the highest forms of marital maturity.",
-    citation: "Sunan an-Nasa'i, Hadith 3408; Ash-Shamail Al-Muhammadiyyah", sunnahLink: "https://sunnah.com/nasai:3408",
-    tags: ["marriage", "conflict", "patience", "de-escalation", "emotional-intelligence"]
-  },
-  {
-    id: "8", title: "Greeting the Children First", category: "Interpersonal Relationships", categorySlug: "relationships",
-    emoji: "🐦", shortDesc: "He would walk through Medina's streets and initiate the greeting of peace with the children playing.",
-    story: "In 7th-century Arabia, children were frequently marginalized. The Prophet ﷺ systematically dismantled this through his public behavior. He was known to walk through the streets of Medina, actively seek out children playing, and initiate the greeting of Salaam with them, validating their existence. When he noticed a young boy, Abu Umair, grieving over the death of his pet bird (Nughayr), he stopped to console him, playfully rhyming: \"O Abu Umair, what did the Nughayr do?\" — prioritizing one child's emotional pain over his own schedule.",
-    modernApplication: "When you encounter a child, get down to their level and greet them first. Ask about something specific to their world: a toy, a friend, a show they like. This single act communicates to a child that they are significant, seen, and valued in the adult world.",
-    citation: "Sunan Abi Dawud, Hadith 4969; Al-Adab Al-Mufrad, Hadith 253", sunnahLink: "https://sunnah.com/adab:253",
-    tags: ["children", "kindness", "parenting", "community", "empathy"]
-  },
-  {
-    id: "9", title: "The Prolonged Prostration", category: "Interpersonal Relationships", categorySlug: "relationships",
-    emoji: "🤲", shortDesc: "During prayer, a child climbed his back. He prolonged the prostration until the child was satisfied — then calmly continued.",
-    story: "During a congregational prostration (Sujud), a child climbed onto the back of the Prophet ﷺ. He prolonged the prostration so significantly that companions feared something had happened. When asked if he received revelation during that long pause, he clarified: \"Nothing at all happened, but my son was on my back and I did not wish to disturb him until he had had enough.\" He also stated: \"When I stand for prayer, I intend to prolong it, but on hearing the cries of a child, I cut it short, as I dislike to trouble the child's mother.\"",
-    modernApplication: "When a child interrupts something important — a meeting, a prayer, a conversation — honor the interruption before resuming. This communicates to the child that they are not an inconvenience. The brief pause costs you seconds; the message it sends them will last a lifetime.",
-    citation: "Sunan an-Nasa'i, Hadith 1141; Sahih al-Bukhari, Hadith 707", sunnahLink: "https://sunnah.com/bukhari:707",
-    tags: ["children", "prayer", "patience", "parenting", "mercy"]
-  },
-  {
-    id: "10", title: "Whole-Body Listening", category: "Interpersonal Relationships", categorySlug: "relationships",
-    emoji: "👂", shortDesc: "When someone spoke to him, he turned his entire torso to face them — absolute, undivided physical and psychological attention.",
-    story: "When someone called out to him or spoke to him, the Prophet ﷺ did not merely turn his neck or offer a dismissive sidelong glance. He turned his entire torso to face the speaker squarely, granting them his absolute, undivided physical and psychological attention. His speech was equally disciplined: he would allow a speaker to finish their thought entirely without interruption. Only when the speaker had completely exhausted their words would he ask, \"Have you finished?\" before delivering his response.",
-    modernApplication: "Practice 'whole-body listening.' When someone speaks to you, physically turn toward them — put down your phone, close the laptop, make eye contact. Allow them to finish completely before formulating your response. This single habit, applied consistently, will transform your relationships.",
-    citation: "Ash-Shamail Al-Muhammadiyyah; Al-Adab Al-Mufrad, Hadith 1115", sunnahLink: "https://sunnah.com/adab:1115",
-    tags: ["communication", "listening", "presence", "relationships", "emotional-intelligence"]
-  },
-  {
-    id: "11", title: "The Perpetual Smile", category: "Interpersonal Relationships", categorySlug: "relationships",
-    emoji: "☀️", shortDesc: "His resting expression was perpetually cheerful. Abdullah ibn Al-Harith said: 'I have never seen anyone smile more.'",
-    story: "The physical presence of the Prophet ﷺ was described by companions as perpetually cheerful. Abdullah ibn Al-Harith noted: \"I have never seen anyone smile more than Allah's Messenger.\" Yet his joy was refined — he rarely engaged in uproarious, open-mouthed laughter that compromised his dignity. His laughter was predominantly a broad smile that illuminated his face, with companions poetically likening his teeth to hailstones. His walk was purposeful, dynamic, and energetic — brisk, lifting his feet firmly and leaning slightly forward, as if descending a slope.",
-    modernApplication: "Consciously soften your resting expression. Most people's default face communicates stress, distance, or disapproval. A gentle, relaxed facial expression is one of the most powerful gifts you can give the people around you — it signals safety, warmth, and welcome. Smiling at a stranger is Sadaqah (charity).",
-    citation: "Ash-Shamail Al-Muhammadiyyah, Chapter 9; Jami' at-Tirmidhi, Hadith 3641", sunnahLink: "https://sunnah.com/tirmidhi:3641",
-    tags: ["demeanor", "smile", "community", "character", "joy"]
-  },
-  {
-    id: "12", title: "Ethical Commerce", category: "Commerce & Public Life", categorySlug: "commerce",
-    emoji: "🤝", shortDesc: "He prayed for Allah's mercy upon the lenient buyer, seller, and debt-collector. Ease was his commercial ethic.",
-    story: "The Prophet ﷺ actively participated in the marketplace, modeling an attitude of grace, leniency, and absolute honesty. He established the ethical baseline: \"May Allah's mercy be on him who is lenient in his buying, selling, and in demanding back his money.\" He once came across a companion riding a tired camel that could barely move. He ﷺ struck it gently, made du'a for it, and the camel immediately became vigorous. He then bought the camel, allowed the companion to ride it home, and sent payment above the agreed price — embodying overdelivering on a transaction.",
-    modernApplication: "In every commercial transaction, ask: 'Am I being the lenient party here?' In negotiations, invoices, and debt collection, build in generosity. If you owe someone money, pay them back with a gift of gratitude. If someone owes you, grant them ease. This is not weakness; it is prophetic financial character.",
-    citation: "Sahih al-Bukhari, Hadith 2076; Sahih Muslim, Hadith 1579", sunnahLink: "https://sunnah.com/bukhari:2076",
-    tags: ["commerce", "business", "ethics", "finance", "generosity"]
-  },
-  {
-    id: "13", title: "Smiling at Rudeness", category: "Emotional Intelligence & Crisis", categorySlug: "emotional",
-    emoji: "🧘", shortDesc: "A Bedouin grabbed his cloak so violently it left a mark on his neck. The Prophet ﷺ turned — and smiled.",
-    story: "During his time distributing wealth, a Bedouin approached the Prophet ﷺ from behind and grabbed his cloak with such force that it left a visible red mark on his neck. He then demanded rudely: \"Muhammad! Give me some of Allah's wealth that you possess!\" The Prophet ﷺ turned to the man, smiled, and then instructed his companions to give him what he needed. There was no anger, no public humiliation of the man, and no wounded pride. Only de-escalation and generosity.",
-    modernApplication: "The next time someone is rude or aggressive with you publicly — a difficult customer, an aggressive driver, an impatient colleague — practice the pause before the response. Let a beat pass. A calm, measured response to hostility is not weakness; it is the highest form of social mastery.",
-    citation: "Sahih al-Bukhari, Hadith 3149; Ash-Shamail Al-Muhammadiyyah", sunnahLink: "https://sunnah.com/bukhari:3149",
-    tags: ["patience", "anger", "emotional-intelligence", "public-life", "character"]
-  },
-  {
-    id: "14", title: "Witnessing Grief Fully", category: "Emotional Intelligence & Crisis", categorySlug: "emotional",
-    emoji: "💧", shortDesc: "When his infant son Ibrahim died in his arms, he wept openly: 'The eyes weep, the heart grieves — and we say only what pleases Allah.'",
-    story: "When the Prophet's ﷺ infant son Ibrahim passed away in his arms, he did not suppress his tears in an attempt to project strength. He wept openly and visibly. When companions appeared surprised, he explained: \"The eyes weep, the heart grieves, and we say only what pleases our Lord. O Ibrahim, we are grieved by your parting.\" This was a man who led armies and arbitrated the fates of nations, weeping without shame over the death of a child.",
-    modernApplication: "Give yourself full permission to grieve. Suppressing tears — especially for men — is a cultural norm with no Prophetic basis. Acknowledging loss, sitting with pain, and expressing grief openly (without complaint against Allah) is not weakness. It is emotional wholeness. Honor those you have lost by grieving them fully.",
-    citation: "Sahih al-Bukhari, Hadith 1303; Sahih Muslim, Hadith 2315", sunnahLink: "https://sunnah.com/bukhari:1303",
-    tags: ["grief", "emotional-intelligence", "loss", "vulnerability", "men-mental-health"]
-  },
-  {
-    id: "15", title: "The First to Investigate", category: "Emotional Intelligence & Crisis", categorySlug: "emotional",
-    emoji: "🐎", shortDesc: "When a loud noise woke Medina in panic, he was already riding out bareback — alone — before the guards even stirred.",
-    story: "When a terrifying, loud noise woke the city of Medina in the middle of the night, causing mass panic, the Prophet ﷺ did not wait for his guards. He was the very first to ride out — bareback on a slow horse belonging to Abu Talha — to investigate the perimeter. He returned before the panicking crowd even reached the perceived danger, calmly reassuring the terrified residents: \"Do not be afraid. Do not be afraid.\"",
-    modernApplication: "In a crisis, before others have processed what is happening, be the person who moves toward the problem to assess it calmly. Whether it's a family emergency, a business crisis, or a community incident — the first calm voice that says 'I've assessed this, here is what we know' is worth more than any other resource.",
-    citation: "Sahih al-Bukhari, Hadith 2908; Sahih Muslim, Hadith 2307", sunnahLink: "https://sunnah.com/bukhari:2908",
-    tags: ["courage", "leadership", "crisis", "community", "action"]
-  },
-  {
-    id: "16", title: "The Grateful Slave", category: "Emotional Intelligence & Crisis", categorySlug: "emotional",
-    emoji: "⭐", shortDesc: "He prayed until his feet cracked and bled. When asked why — since all was forgiven — he replied: 'Should I not be a grateful slave?'",
-    story: "The Prophet's ﷺ dedication to the night prayer (Tahajjud) was so intense that he would stand in prayer until his feet swelled and cracked from the exertion. When Aisha observed this and asked why he endured such hardship given that all his shortcomings were forgiven, he replied: \"Should I not be a grateful slave?\" His worship was not transactional, driven by fear or desire for reward. It arose from sheer, overflowing gratitude for existence itself.",
-    modernApplication: "Examine your own acts of worship and service. Are they primarily transactional — seeking reward or avoiding consequence? Practice shifting the intention to pure gratitude. Do something beautiful — a prayer, an act of charity, a kind gesture — not because you need something, but simply because you are grateful to be alive and capable.",
-    citation: "Sahih al-Bukhari, Hadith 4836; Sahih Muslim, Hadith 2819", sunnahLink: "https://sunnah.com/bukhari:4836",
-    tags: ["gratitude", "worship", "intention", "spiritual", "motivation"]
-  },
-  {
-    id: "17", title: "Defending the Voiceless", category: "The Natural World & Environment", categorySlug: "environment",
-    emoji: "🐫", shortDesc: "A camel wept upon seeing him, complaining of overwork. He confronted the owner directly: 'Fear Allah regarding this creature.'",
-    story: "The Prophet's ﷺ empathy extended deeply into the animal kingdom. Once, companions took the chicks of a bird from her nest, causing the mother bird to flutter around in visible distress. The Prophet ﷺ immediately commanded: \"Who has distressed this bird by taking its chicks? Return them at once!\" On another occasion, he entered an orchard and found a starving, overworked camel that began to weep upon seeing him. He confronted the owner directly, warning him to fear Allah regarding his treatment of the defenseless creature.",
-    modernApplication: "Actively speak up when you witness mistreatment of animals or exploitation of those who cannot defend themselves. Whether it is a neighbor's neglected pet or an underpaid worker — the Prophetic standard is not passive witnessing. It is direct, compassionate intervention.",
-    citation: "Sunan Abi Dawud, Hadith 2675 and 2549", sunnahLink: "https://sunnah.com/abudawud:2675",
-    tags: ["animals", "environment", "advocacy", "compassion", "justice"]
-  },
-  {
-    id: "18", title: "Conserving the Sacred River", category: "The Natural World & Environment", categorySlug: "environment",
-    emoji: "💧", shortDesc: "He forbade wasting water during ablution — even on the banks of a powerfully flowing river. Abundance is not permission to waste.",
-    story: "The Prophet ﷺ was incredibly strict regarding resource management. He explicitly commanded his companions not to waste water, even when performing ablution on the banks of a powerfully flowing river. The flowing water all around them did not change his principle: waste is waste, regardless of apparent abundance. He modeled using the minimum necessary and framed excess consumption as a transgression with moral weight.",
-    modernApplication: "Turn off the tap while brushing your teeth, be conscious of resource consumption — not just for environmental reasons, but as an act of worship rooted in the Prophetic example. The river is still flowing; the standard still applies.",
-    citation: "Sunan Ibn Majah, Hadith 425; Musnad Ahmad, Hadith 7065", sunnahLink: "https://sunnah.com/ibnmajah:425",
-    tags: ["environment", "water", "conservation", "worship", "character"]
-  },
-  {
-    id: "19", title: "The Art of the Farewell", category: "Nuanced Personal Expressions", categorySlug: "nuanced",
-    emoji: "👋", shortDesc: "He never rose from a gathering without sincerely inquiring about the needs of each person present before departing.",
-    story: "The Prophet ﷺ treated every gathering as a trust. He was known to never rise to leave without sincerely inquiring about the needs of each person present before departing. After long gatherings, he would conclude with the expiation of the assembly (Kaffaratul-Majlis): \"Subhanakallahumma wa bihamdika, ash-hadu an la ilaha illa anta, astaghfiruka wa atubu ilayk.\" This served as both a spiritual seal on the gathering and a conscious acknowledgment that any shortcomings in conversation were being offered up for forgiveness.",
-    modernApplication: "Before leaving any gathering — a dinner party, a work meeting, a family visit — pause and ask: 'Is there anything anyone needs?' Then close with a small moment of gratitude or reflection. These final 60 seconds transform a routine goodbye into a meaningful farewell that people will remember.",
-    citation: "Jami' at-Tirmidhi, Hadith 3433; Sunan Abi Dawud, Hadith 4858", sunnahLink: "https://sunnah.com/tirmidhi:3433",
-    tags: ["social", "gatherings", "endings", "presence", "community"]
-  },
-  {
-    id: "20", title: "Laughing without Losing Dignity", category: "Nuanced Personal Expressions", categorySlug: "nuanced",
-    emoji: "😄", shortDesc: "He had a sharp, warm sense of humor — and used it often. Humor is not frivolity; it is a form of emotional intelligence.",
-    story: "The Prophet ﷺ had a sharp, playful, and warm sense of humor that he employed with full intentionality. In one famous exchange, an elderly woman came to him and asked if she would enter Paradise. He teased her: \"O mother, there are no old women in Paradise.\" She began to weep, until he completed the joke with profound kindness: \"Did you not read that Allah says He will create them anew, making them virgins, youthful companions?\" In another narration, he told a man who wanted to borrow a camel: \"I will give you the child of a camel\" — and when the man expressed confusion, smiled and clarified: \"Every camel is the child of a camel.\"",
-    modernApplication: "Humor is not frivolity — it is a form of emotional intelligence. Use wit and warmth in your interactions, particularly with the elderly and children, who are most likely to be spoken to with formality and distance. The goal of the joke is always to end with the other person smiling, never to leave them in doubt.",
-    citation: "Jami' at-Tirmidhi, Hadith 3893; Ash-Shamail Al-Muhammadiyyah, Chapter on Humor", sunnahLink: "https://sunnah.com/tirmidhi:3893",
-    tags: ["humor", "joy", "character", "social", "lightness"]
-  }
-];
 
 const CATEGORIES = [
   { slug: "all", label: "All", emoji: "✨" },
@@ -800,19 +638,19 @@ function Onboarding({ onComplete }) {
 }
 
 // ─── DISCOVER TAB ────────────────────────────────────────────────────────────
-function DiscoverTab({ routine, onAddRemove, onHabitClick }) {
+function DiscoverTab({ routine, onAddRemove, onHabitClick, habits }) {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
 
-  const filtered = HABITS.filter(h => {
+  const filtered = useMemo(() => habits.filter(h => {
     const matchCat = category === "all" || h.categorySlug === category;
     const matchSearch = !search || h.title.toLowerCase().includes(search.toLowerCase()) ||
       h.shortDesc.toLowerCase().includes(search.toLowerCase()) ||
       h.tags.some(t => t.includes(search.toLowerCase()));
     return matchCat && matchSearch;
-  });
+  }), [habits, category, search]);
 
-  const featured = HABITS[new Date().getDate() % HABITS.length];
+  const featured = habits.length > 0 ? habits[new Date().getDate() % habits.length] : null;
 
   return (
     <div className="screen">
@@ -857,7 +695,7 @@ function DiscoverTab({ routine, onAddRemove, onHabitClick }) {
 
       <div style={{ padding: "16px" }}>
         {/* Featured - only when no search/filter */}
-        {category === "all" && !search && (
+        {category === "all" && !search && featured && (
           <div className="anim-fade-up" style={{ marginBottom: 20 }}>
             <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--ink-muted)", marginBottom: 10 }}>
               ✨ Today's Inspiration
@@ -904,8 +742,8 @@ function DiscoverTab({ routine, onAddRemove, onHabitClick }) {
 }
 
 // ─── CHECKLIST TAB ───────────────────────────────────────────────────────────
-function ChecklistTab({ routine, checked, onToggle, burst, onHabitClick }) {
-  const myHabits = HABITS.filter(h => routine.includes(h.id));
+function ChecklistTab({ routine, checked, onToggle, burst, onHabitClick, habits }) {
+  const myHabits = habits.filter(h => routine.includes(h.id));
   const completedCount = myHabits.filter(h => checked.includes(h.id)).length;
   const progress = myHabits.length ? (completedCount / myHabits.length) : 0;
 
@@ -989,8 +827,8 @@ function ChecklistTab({ routine, checked, onToggle, burst, onHabitClick }) {
 }
 
 // ─── STREAK TAB ──────────────────────────────────────────────────────────────
-function StreakTab({ streak, routine, checked }) {
-  const myHabits = HABITS.filter(h => routine.includes(h.id));
+function StreakTab({ streak, routine, checked, habits }) {
+  const myHabits = habits.filter(h => routine.includes(h.id));
   const completedCount = myHabits.filter(h => checked.includes(h.id)).length;
 
   const milestones = [
@@ -1087,6 +925,22 @@ function StreakTab({ streak, routine, checked }) {
 
 // ─── MAIN APP ────────────────────────────────────────────────────────────────
 export default function App() {
+  const [habits, setHabits] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('/habits.json')
+      .then(res => res.json())
+      .then(data => {
+        setHabits(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Failed to load habits:', err);
+        setLoading(false);
+      });
+  }, []);
+
   const [onboarded, setOnboarded] = useState(() => load(STORAGE_KEYS.onboarded, false));
   const [tab, setTab] = useState("discover");
   const [routine, setRoutine] = useState(() => load(STORAGE_KEYS.routine, []));
@@ -1147,6 +1001,12 @@ export default function App() {
     { id: "streak", icon: "🔥", label: `${streak} Day${streak !== 1 ? "s" : ""}` },
   ];
 
+  if (loading) return (
+    <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", background: "var(--cream)", height: "100vh" }}>
+      <p style={{ fontFamily: "DM Sans, sans-serif", color: "var(--ink-muted)" }}>Loading habits...</p>
+    </div>
+  );
+
   if (!onboarded) return (
     <>
       <style>{S.css}</style>
@@ -1161,13 +1021,13 @@ export default function App() {
       {/* Screens */}
       <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column" }}>
         {tab === "discover" && (
-          <DiscoverTab routine={routine} onAddRemove={handleAddRemove} onHabitClick={setSelectedHabit} />
+          <DiscoverTab routine={routine} onAddRemove={handleAddRemove} onHabitClick={setSelectedHabit} habits={habits} />
         )}
         {tab === "checklist" && (
-          <ChecklistTab routine={routine} checked={checked} onToggle={handleToggle} burst={burstId} onHabitClick={setSelectedHabit} />
+          <ChecklistTab routine={routine} checked={checked} onToggle={handleToggle} burst={burstId} onHabitClick={setSelectedHabit} habits={habits} />
         )}
         {tab === "streak" && (
-          <StreakTab streak={streak} routine={routine} checked={checked} />
+          <StreakTab streak={streak} routine={routine} checked={checked} habits={habits} />
         )}
       </div>
 
